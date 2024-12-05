@@ -60,11 +60,26 @@
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
             canvas.getContext('2d').drawImage(video, 0, 0);
-            
-            // Save photo to localStorage for the share page
-            localStorage.setItem('photo', canvas.toDataURL('image/jpeg'));
-            window.location.href = 'sharePage.html';
+
+            // Convertir la photo en blob
+            canvas.toBlob(blob => {
+                const formData = new FormData();
+                formData.append('photo', blob);
+
+                // Envoyer la photo au serveur
+                fetch('/upload', { method: 'POST', body: formData })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            localStorage.setItem('photoUrl', data.url);
+                            window.location.href = 'sharePage.html';
+                        } else {
+                            console.error('Error uploading photo');
+                        }
+                    });
+            }, 'image/jpeg');
         }
+
     </script>
 </body>
 </html>

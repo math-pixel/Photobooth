@@ -25,20 +25,22 @@
     </div>
 
     <script>
-        // Display the captured photo
+        // Afficher la photo et générer un QR code
         const photo = document.getElementById('photo');
-        const photoData = localStorage.getItem('photo');
-        if (photoData) {
-            photo.src = photoData;
-            
-            // Generate QR Code
+        const photoUrl = localStorage.getItem('photoUrl');
+
+        if (photoUrl) {
+            photo.src = photoUrl;
+
+            // Générer le QR code avec l'URL de la photo
             const qr = qrcode(0, 'M');
-            qr.addData(photoData);
+            qr.addData(photoUrl);
             qr.make();
             document.getElementById('qrcode').innerHTML = qr.createImgTag(6);
         } else {
-            window.location.href = 'index.html';
+            window.location.href = 'attractLoop.html';
         }
+
     </script>
 </body>
 </html>
