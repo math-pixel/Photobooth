@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhotoBooth - Capture</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-primary-from to-primary-to flex flex-col items-center justify-center">
+    <div class="relative">
+        <video id="video" class="rounded-2xl shadow-lg w-[640px] h-[480px] bg-black" autoplay></video>
+        <div id="countdown" class="absolute inset-0 flex items-center justify-center text-white text-8xl font-bold hidden"></div>
+    </div>
+    <button id="capture" class="mt-8 px-8 py-4 bg-white text-primary-from rounded-xl text-xl font-semibold hover:bg-opacity-90 transition-colors">
+        Take photo !
+    </button>
+    <canvas id="canvas" class="hidden"></canvas>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const captureButton = document.getElementById('capture');
+        const countdownDiv = document.getElementById('countdown');
+
+        // Get webcam access
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(err => console.error(err));
+
+        // Countdown and capture
+        captureButton.addEventListener('click', () => {
+            captureButton.disabled = true;
+            startCountdown();
+        });
+
+        function startCountdown() {
+            let count = 3;
+            countdownDiv.classList.remove('hidden');
+            
+            const countdown = setInterval(() => {
+                if (count > 0) {
+                    countdownDiv.textContent = count;
+                    countdownDiv.classList.add('animate-countdown');
+                    setTimeout(() => {
+                        countdownDiv.classList.remove('animate-countdown');
+                    }, 900);
+                    count--;
+                } else {
+                    clearInterval(countdown);
+                    countdownDiv.classList.add('hidden');
+                    capturePhoto();
+                }
+            }, 1000);
+        }
+
+        function capturePhoto() {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            
+            // Save photo to localStorage for the share page
+            localStorage.setItem('photo', canvas.toDataURL('image/jpeg'));
+            window.location.href = 'sharePage.html';
+        }
+    </script>
+</body>
+</html>

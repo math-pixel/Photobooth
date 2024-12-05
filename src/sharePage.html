@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhotoBooth - Partage</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-primary-from to-primary-to flex flex-col items-center justify-center p-8">
+    <div class="bg-white rounded-2xl p-8 max-w-md w-full">
+        <h2 class="text-2xl font-semibold text-center mb-6">Votre photo est prête !</h2>
+        <img id="photo" class="rounded-xl mb-6 w-full" alt="Votre photo">
+        <div id="qrcode" class="flex justify-center mb-6"></div>
+        <p class="text-center text-gray-600 mb-6">Scannez le QR code pour télécharger votre photo</p>
+        <div class="flex justify-center gap-4">
+            <button onclick="window.location.href='capture.html'" class="px-6 py-3 bg-primary-from text-white rounded-xl hover:bg-opacity-90 transition-colors">
+                Nouvelle Photo
+            </button>
+            <button onclick="window.location.href='index.html'" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-xl hover:bg-opacity-90 transition-colors">
+                Accueil
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Display the captured photo
+        const photo = document.getElementById('photo');
+        const photoData = localStorage.getItem('photo');
+        if (photoData) {
+            photo.src = photoData;
+            
+            // Generate QR Code
+            const qr = qrcode(0, 'M');
+            qr.addData(photoData);
+            qr.make();
+            document.getElementById('qrcode').innerHTML = qr.createImgTag(6);
+        } else {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
