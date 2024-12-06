@@ -28,7 +28,7 @@
         // Afficher la photo et générer un QR code
         const photo = document.getElementById('photo');
         const photoUrl = localStorage.getItem('photoUrl');
-
+        console.log("photo url : " + photoUrl)
         if (photoUrl) {
             photo.src = photoUrl;
 

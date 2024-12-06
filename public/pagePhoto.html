@@ -24,11 +24,15 @@
         const countdownDiv = document.getElementById('countdown');
 
         // Get webcam access
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(stream => {
-                video.srcObject = stream;
-            })
-            .catch(err => console.error(err));
+        try{
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    video.srcObject = stream;
+                })
+                .catch(err => console.error(err));
+        }catch{
+            console.error("Camera is not accesible")
+        }
 
         // Countdown and capture
         captureButton.addEventListener('click', () => {
